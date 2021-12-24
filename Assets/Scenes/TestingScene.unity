@@ -375,7 +375,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   feetPos: {fileID: 1194594817}
-  jumpForce: 5
+  checkRadius: 0.3
+  jumpForce: 7
   movement_speed: 3.8
   whatIsGround:
     serializedVersion: 2
@@ -421,7 +422,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 1.4
   m_Material: {fileID: 6200000, guid: 5474414226f006646a83675b05474957, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -524,7 +525,7 @@ GameObject:
   m_Layer: 0
   m_Name: feetPos
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1

@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
     // Jumping
     private bool isGrounded;
     public Transform feetPos;
-    private float checkRadius;
+    public Vector2 checkVector;
     public float jumpForce = 5f;
 
     // Movement
@@ -42,37 +42,43 @@ public class PlayerController : MonoBehaviour
         }
         else if (horizontalAxis < 0 && facingRight)
         {
-            // ... flip the player.
             Flip();
         }
 
-        // Animation
-        animator.SetFloat("playerSpeed", Mathf.Abs(horizontalAxis));
-
         // Jump
-        isGrounded = Physics2D.OverlapCircle(feetPos.position, checkRadius, whatIsGround);
+        isGrounded = Physics2D.OverlapBox(feetPos.position, checkVector, 0f, whatIsGround); 
 
-        if (isGrounded == true && Input.GetKeyDown(KeyCode.Space)) 
+        if (isGrounded  && Input.GetKeyDown(KeyCode.Space)) 
         {
             player_physics.velocity = Vector2.up * jumpForce;
         }
+
+        // Animation
+        animator.SetFloat("playerSpeed", Mathf.Abs(player_physics.velocity.x)); // Movement
+        animator.SetBool("isJumping", !isGrounded); // Jump
+        animator.SetFloat("playerSpeedY", player_physics.velocity.y);
     }
 
     private void FixedUpdate()
     {
+        // Move player
+        MovePlayer();
+    }
+
+    public void MovePlayer() 
+    {
         player_physics.velocity = new Vector2(horizontalAxis * movement_speed, player_physics.velocity.y);
     }
 
-   
-
-    private void Flip()
+    public void Flip()
     {
         // Switch the way the player is labeled as facing.
         facingRight = !facingRight;
 
         // Multiply the player's x local scale by -1.
-        Vector3 theScale = transform.localScale;
-        theScale.x *= -1;
-        transform.localScale = theScale;
+        //Vector3 theScale = transform.localScale;
+        //theScale.x *= -1;
+        //transform.localScale = theScale;
+        transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
     }
 }
