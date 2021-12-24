@@ -10,6 +10,10 @@ public class PlayerController : MonoBehaviour
     public Vector2 checkVector;
     public float jumpForce = 5f;
 
+    private float jumpTimeCounter;
+    public float jumpTime = 2f;
+    private bool isJumping;
+
     // Movement
     public float movement_speed = 3f;
     private Vector2 movement;
@@ -33,7 +37,9 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        isGrounded = Physics2D.OverlapBox(feetPos.position, checkVector, 0f, whatIsGround); // is grounded true or false
         horizontalAxis = Input.GetAxisRaw("Horizontal"); // obtain values of where is moving, -1 left, 0 idle, 1 right
+
 
         // flip sprite
         if (horizontalAxis > 0 && !facingRight)
@@ -46,13 +52,27 @@ public class PlayerController : MonoBehaviour
         }
 
         // Jump
-        isGrounded = Physics2D.OverlapBox(feetPos.position, checkVector, 0f, whatIsGround); 
-
-        if (isGrounded  && Input.GetKeyDown(KeyCode.Space)) 
+        if (isGrounded && Input.GetKeyDown(KeyCode.Space)) 
         {
             player_physics.velocity = Vector2.up * jumpForce;
+            //jumpTimeCounter = jumpTime;
+            //isJumping = true;
         }
 
+        //if (Input.GetKey(KeyCode.Space) && isJumping == true)
+        //{
+        //    if (jumpTimeCounter > 0) 
+        //    {
+        //        player_physics.velocity = Vector2.up * jumpForce;
+        //        jumpTimeCounter -= Time.deltaTime;
+        //    } else {
+        //        isJumping = false;
+        //    }
+        //}
+        //if (Input.GetKeyUp(KeyCode.Space)) 
+        //{
+        //    isJumping = false;
+        //}
         // Animation
         animator.SetFloat("playerSpeed", Mathf.Abs(player_physics.velocity.x)); // Movement
         animator.SetBool("isJumping", !isGrounded); // Jump
