@@ -40,7 +40,6 @@ public class PlayerController : MonoBehaviour
         isGrounded = Physics2D.OverlapBox(feetPos.position, checkVector, 0f, whatIsGround); // is grounded true or false
         horizontalAxis = Input.GetAxisRaw("Horizontal"); // obtain values of where is moving, -1 left, 0 idle, 1 right
 
-
         // flip sprite
         if (horizontalAxis > 0 && !facingRight)
         {
@@ -51,28 +50,50 @@ public class PlayerController : MonoBehaviour
             Flip();
         }
 
+        if (isGrounded && isJumping && player_physics.velocity.y < 0f)
+        {
+            isJumping = false;
+        }
+
         // Jump
-        if (isGrounded && Input.GetKeyDown(KeyCode.Space)) 
+        if (isGrounded && Input.GetKeyDown(KeyCode.Space) && !isJumping) 
         {
             player_physics.velocity = Vector2.up * jumpForce;
-            //jumpTimeCounter = jumpTime;
-            //isJumping = true;
+            jumpTimeCounter = jumpTime;
+            isJumping = true;
         }
+
+        //if (jumpTimeCounter > 0)
+        //{
+        //    jumpTimeCounter -= Time.deltaTime;
+        //}
+        //else {
+        //    if (player_physics.velocity.y > 0f) {
+        //        player_physics.velocity = Vector2.up * 0;
+        //    }
+        //    jumpTimeCounter = 0;
+        //}
 
         //if (Input.GetKey(KeyCode.Space) && isJumping == true)
         //{
-        //    if (jumpTimeCounter > 0) 
+        //    if (jumpTimeCounter > 0)
         //    {
-        //        player_physics.velocity = Vector2.up * jumpForce;
+        //        //player_physics.velocity = Vector2.up * jumpForce;
         //        jumpTimeCounter -= Time.deltaTime;
-        //    } else {
+        //    }
+        //    else
+        //    {
         //        isJumping = false;
         //    }
         //}
-        //if (Input.GetKeyUp(KeyCode.Space)) 
-        //{
-        //    isJumping = false;
-        //}
+        if (Input.GetKeyUp(KeyCode.Space) && isJumping)
+        {
+            if (player_physics.velocity.y > 0f)
+            {
+                player_physics.velocity = Vector2.up * 0;
+            }
+            isJumping = false;
+        }
         // Animation
         animator.SetFloat("playerSpeed", Mathf.Abs(player_physics.velocity.x)); // Movement
         animator.SetBool("isJumping", !isGrounded); // Jump
