@@ -450,6 +450,36 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &429006700
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 429006701}
+  m_Layer: 0
+  m_Name: frontPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &429006701
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 429006700}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.4, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1002633376}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &704932788
 GameObject:
   m_ObjectHideFlags: 0
@@ -702,13 +732,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   feetPos: {fileID: 1194594817}
+  frontPos: {fileID: 429006701}
   checkVector: {x: 0.5, y: 0.1}
+  checkVectorWall: {x: 0.1, y: 0.5}
   jumpForce: 10
+  slideForce: 3
   jumpTime: 2
   movement_speed: 3.2
   whatIsGround:
     serializedVersion: 2
     m_Bits: 64
+  maxVerticalSpeed: 15
+  maxVerticalSpeedSliding: 2
 --- !u!61 &1002633372
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -839,6 +874,7 @@ Transform:
   m_Children:
   - {fileID: 1194594817}
   - {fileID: 1970070578}
+  - {fileID: 429006701}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -854,7 +890,7 @@ GameObject:
   m_Layer: 0
   m_Name: feetPos
   m_TagString: Untagged
-  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -884,7 +920,7 @@ GameObject:
   m_Layer: 0
   m_Name: firePos
   m_TagString: Untagged
-  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1

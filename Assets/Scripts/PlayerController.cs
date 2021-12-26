@@ -7,8 +7,11 @@ public class PlayerController : MonoBehaviour
     // Jumping
     private bool isGrounded;
     public Transform feetPos;
+    public Transform frontPos;
     public Vector2 checkVector;
+    public Vector2 checkVectorWall;
     public float jumpForce = 5f;
+    public float slideForce = 3f;
 
     private float jumpTimeCounter;
     public float jumpTime = 2f;
@@ -20,11 +23,17 @@ public class PlayerController : MonoBehaviour
     private float horizontalAxis;
     public LayerMask whatIsGround;
 
+    // Limitacion velocidad vertical
+    public float maxVerticalSpeed = 15f;
+    public float maxVerticalSpeedSliding = 2f;
+
     // Physics
     private Rigidbody2D player_physics;
 
     //sprite & animations
     private bool facingRight = true;
+    private bool isOnWall = false;
+    private bool isSliding = false;
     private Animator animator;
 
     // Start is called before the first frame update
@@ -38,17 +47,9 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         isGrounded = Physics2D.OverlapBox(feetPos.position, checkVector, 0f, whatIsGround); // is grounded true or false
+        isOnWall = Physics2D.OverlapBox(frontPos.position, checkVectorWall, 0f, whatIsGround);
         horizontalAxis = Input.GetAxisRaw("Horizontal"); // obtain values of where is moving, -1 left, 0 idle, 1 right
-
-        // flip sprite
-        if (horizontalAxis > 0 && !facingRight)
-        {
-            Flip();
-        }
-        else if (horizontalAxis < 0 && facingRight)
-        {
-            Flip();
-        }
+        isSliding = animator.GetCurrentAnimatorStateInfo(0).IsName("sliding");
 
         if (isGrounded && isJumping && player_physics.velocity.y < 0f)
         {
@@ -63,29 +64,29 @@ public class PlayerController : MonoBehaviour
             isJumping = true;
         }
 
-        //if (jumpTimeCounter > 0)
-        //{
-        //    jumpTimeCounter -= Time.deltaTime;
-        //}
-        //else {
-        //    if (player_physics.velocity.y > 0f) {
-        //        player_physics.velocity = Vector2.up * 0;
-        //    }
-        //    jumpTimeCounter = 0;
-        //}
+        // flip sprite
+        if (!isSliding)
+        {
+            if (horizontalAxis > 0 && !facingRight)
+            {
+                Flip();
+            }
+            else if (horizontalAxis < 0 && facingRight)
+            {
+                Flip();
+            }
 
-        //if (Input.GetKey(KeyCode.Space) && isJumping == true)
-        //{
-        //    if (jumpTimeCounter > 0)
-        //    {
-        //        //player_physics.velocity = Vector2.up * jumpForce;
-        //        jumpTimeCounter -= Time.deltaTime;
-        //    }
-        //    else
-        //    {
-        //        isJumping = false;
-        //    }
-        //}
+            // Limitacion de velocidad vertical
+            if (player_physics.velocity.y < -maxVerticalSpeed)
+                player_physics.velocity = new Vector2(player_physics.velocity.x, -maxVerticalSpeed);
+        }
+        else {
+
+            // Limitacion de velocidad vertical
+            if (player_physics.velocity.y < -maxVerticalSpeedSliding)
+                player_physics.velocity = new Vector2(player_physics.velocity.x, -maxVerticalSpeedSliding);
+        }
+
         if (Input.GetKeyUp(KeyCode.Space) && isJumping)
         {
             if (player_physics.velocity.y > 0f)
@@ -94,10 +95,13 @@ public class PlayerController : MonoBehaviour
             }
             isJumping = false;
         }
+
         // Animation
         animator.SetFloat("playerSpeed", Mathf.Abs(player_physics.velocity.x)); // Movement
         animator.SetBool("isJumping", !isGrounded); // Jump
         animator.SetFloat("playerSpeedY", player_physics.velocity.y);
+        animator.SetBool("onWall", isOnWall);
+        animator.SetBool("HorizontalKey", horizontalAxis != 0);
     }
 
     private void FixedUpdate()
