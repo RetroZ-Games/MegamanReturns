@@ -733,7 +733,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   feetPos: {fileID: 1194594817}
   frontPos: {fileID: 429006701}
-  checkVector: {x: 0.5, y: 0.1}
+  checkVector: {x: 0.74, y: 0.1}
   checkVectorWall: {x: 0.1, y: 0.5}
   jumpForce: 10
   slideForce: 3
