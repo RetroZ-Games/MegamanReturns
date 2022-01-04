@@ -34,7 +34,13 @@ public class PlayerController : MonoBehaviour
     private bool facingRight = true;
     private bool isOnWall = false;
     private bool isSliding = false;
+    private bool slideFlip = false;
     private Animator animator;
+
+    bool wallJumping = false;
+    public float xWallForce;
+    public float yWallForce;
+    public float walljumpTime;
 
     // Start is called before the first frame update
     void Start()
@@ -79,21 +85,29 @@ public class PlayerController : MonoBehaviour
             // Limitacion de velocidad vertical
             if (player_physics.velocity.y < -maxVerticalSpeed)
                 player_physics.velocity = new Vector2(player_physics.velocity.x, -maxVerticalSpeed);
+
+            if (Input.GetKeyUp(KeyCode.Space) && isJumping)
+            {
+                if (player_physics.velocity.y > 0f) player_physics.velocity = Vector2.up * 0;
+                isJumping = false;
+            }
         }
         else {
 
             // Limitacion de velocidad vertical
             if (player_physics.velocity.y < -maxVerticalSpeedSliding)
                 player_physics.velocity = new Vector2(player_physics.velocity.x, -maxVerticalSpeedSliding);
+
+            if (Input.GetKeyUp(KeyCode.Space))
+            {
+                wallJumping = true;
+                Invoke("SetWallJumpingToFalse", walljumpTime);
+            }
         }
 
-        if (Input.GetKeyUp(KeyCode.Space) && isJumping)
-        {
-            if (player_physics.velocity.y > 0f)
-            {
-                player_physics.velocity = Vector2.up * 0;
-            }
-            isJumping = false;
+        if (wallJumping) {
+            player_physics.AddForce(new Vector2(xWallForce * -horizontalAxis, 0));
+            player_physics.velocity = Vector2.up * yWallForce;
         }
 
         // Animation
@@ -125,5 +139,9 @@ public class PlayerController : MonoBehaviour
         //theScale.x *= -1;
         //transform.localScale = theScale;
         transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
+    }
+
+    void SetWallJumpingToFalse() {
+        wallJumping = false;
     }
 }

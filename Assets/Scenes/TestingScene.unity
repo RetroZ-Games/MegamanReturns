@@ -744,6 +744,9 @@ MonoBehaviour:
     m_Bits: 64
   maxVerticalSpeed: 15
   maxVerticalSpeedSliding: 2
+  xWallForce: 35
+  yWallForce: 8
+  walljumpTime: 0.05
 --- !u!61 &1002633372
 BoxCollider2D:
   m_ObjectHideFlags: 0
